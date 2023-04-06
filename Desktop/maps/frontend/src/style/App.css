@@ -1,0 +1,42 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(1px + 2vmin);
+  color: white;
+}
+
+.info {
+  position: fixed;
+  width: 80%;
+  z-index: 99999;
+}
+
+/* .inputBox {
+  position: fixed;
+  margin-left: 5%;
+  width: 80%;
+  z-index: 99999;
+}*/
+
+.messageBox {
+  white-space: pre-line;
+  width: 25rem;
+  min-height: 5rem;
+  z-index: 99999;
+  word-wrap: break-word;
+}
+
+.search {
+  width: 40rem;
+}
+.key {
+  display: inline-block;
+}
