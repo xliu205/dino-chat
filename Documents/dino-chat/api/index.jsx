@@ -7,7 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const ws = require("ws");
-
+const Message = require("./models/Message");
 
 
 dotenv.config();
@@ -102,6 +102,8 @@ console.log("Server listening on port 4000");
 const wss = new ws.WebSocketServer({ server });
 wss.on("connection", (connection,req) => {
   // console.log("New Cilent Connected");
+
+  //read cookies from headers
   const cookies = req.headers.cookie;
   //check if has many cookies
   if (cookies) {
@@ -126,6 +128,31 @@ wss.on("connection", (connection,req) => {
         }
     }
   }
+//notify all clients that a new user has connected
+connection.on("message", async (message) => {
+  // bufffer to json 
+  const messageData = JSON.parse(message.toString());
+  // console.log("message", message);
+  const {recipient, text} = messageData;
+  if (recipient && text ){
+  const messageDoc = await Message.create({
+    sender:connection.userId,
+    recipient,
+    text,
+  });
+
+  [...wss.clients]
+  .filter(c => c.userId === recipient)
+  .forEach(c => c.send(JSON.stringify({
+    text, 
+    sender:connection.userId,
+    id:messageDoc._id,
+    recipient,
+  })));
+  }
+});
+
+  
 
 
   [...wss.clients].forEach(client => {
