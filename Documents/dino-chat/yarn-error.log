@@ -1,0 +1,26 @@
+Arguments: 
+  /usr/local/bin/node /opt/homebrew/bin/yarn create vite
+
+PATH: 
+  /opt/homebrew/bin:/opt/homebrew/sbin:/Users/lisaliu/env/anaconda3/bin:/Users/lisaliu/env/anaconda3/bin:/Users/lisaliu/env/anaconda3/condabin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.14.1
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: EACCES: permission denied, mkdir '/Users/lisaliu/.config/yarn'
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
