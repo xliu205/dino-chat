@@ -29,10 +29,45 @@ app.use(cors({
     origin: process.env.CLIENT_URL,
 }));
 
+//endpoint for testing
 app.get("/test", (req, res) => {
   res.json("test ok");
 });
 
+function getUserDataFromRequest(req) {
+  return new Promise((resolve, reject) => {
+    const token = req.cookies?.token;
+    if (token){
+        jwt.verify(token, jwtSecret, {}, (err, userData) => {
+          if (err) throw err;
+          resolve(userData);
+        });
+      }else{
+        reject("no token");
+      }
+  });
+}
+
+//endpoint for getting all messages
+app.get("/messages/:userId", async (req, res) => {
+  const {userId} = req.params;
+  const userData = await getUserDataFromRequest(req);
+  const ourUserId = userData.userId;
+  const messages = await Message.find({
+    sender:{$in:[userId, ourUserId]},
+    recipient:{$in:[userId, ourUserId]},
+  })
+  .sort({createdAt:1});
+  res.json(messages);
+});
+
+//endpoint for getting all users
+app.get("/people", async (req, res) => {
+const users = await User.find({},{'_id':1, 'username':1});
+res.json(users);
+});
+
+//endpoint for getting all users
 app.get("/profile", (req, res) => {
     const token = req.cookies?.token;
     if (token){
@@ -46,6 +81,8 @@ app.get("/profile", (req, res) => {
     }
     
 });
+
+//endpoint for logging in
 app.post("/login", async (req, res) => {
     const {username, password} = req.body;
     const foundUser = await User.findOne({username});
@@ -66,8 +103,7 @@ app.post("/login", async (req, res) => {
 
 });
 
-
-
+//endpioint for registering a new user
 app.post("/register", async (req, res) => {
     const {username, password} = req.body;
     try {
@@ -96,12 +132,48 @@ app.post("/register", async (req, res) => {
     }
   
 });
+
+//endpoint for logging out
+app.post("/logout", (req, res) => {
+  res.cookie("token", "", { sameSite: "none", secure: true }).json("ok");
+});
+
+
 const server = app.listen(4000);
 console.log("Server listening on port 4000");
-
 const wss = new ws.WebSocketServer({ server });
 wss.on("connection", (connection,req) => {
   // console.log("New Cilent Connected");
+
+
+  function notifyOnlinePeople() {
+    [...wss.clients].forEach((client) => {
+      //websocket as array, get online users
+      client.send(
+        JSON.stringify({
+          online: [...wss.clients].map((c) => ({
+            userId: c.userId,
+            username: c.username,
+          })),
+        })
+      );
+    });
+  }
+
+  connection.isLive = true;
+  connection.timer = setInterval(() => {
+    connection.ping();
+    connection.deathTimer = setTimeout(() => {
+      connection.isLive = false;
+      clearInterval(connection.timer);
+      connection.terminate();
+      notifyOnlinePeople();
+    },1000);
+  },5000);
+
+  connection.on("pong", () => {
+    clearTimeout(connection.deathTimer);
+  });
 
   //read cookies from headers
   const cookies = req.headers.cookie;
@@ -128,6 +200,7 @@ wss.on("connection", (connection,req) => {
         }
     }
   }
+
 //notify all clients that a new user has connected
 connection.on("message", async (message) => {
   // bufffer to json 
@@ -146,26 +219,13 @@ connection.on("message", async (message) => {
   .forEach(c => c.send(JSON.stringify({
     text, 
     sender:connection.userId,
-    id:messageDoc._id,
+    _id:messageDoc._id,
     recipient,
   })));
   }
-});
-
-  
-
-
-  [...wss.clients].forEach(client => {
-    //websocket as array, get online users
-    client.send(JSON.stringify({
-        online:[...wss.clients].map(c => ({userId:c.userId, username:c.username})),
-       }));
   });
 
-
-
-
-
-
+  notifyOnlinePeople();
+  
 
 });
