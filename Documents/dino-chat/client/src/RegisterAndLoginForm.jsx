@@ -3,15 +3,6 @@ import { useContext } from "react";
 import axios from "axios";
 import { UserContext } from "./UserContext.jsx";
 
-
-
-
-
-
-// const api = axios.create({
-//   baseURL: "http://localhost:4000", // replace with the base URL of your backend API
-// });
-
 export default function RegisterAndLoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
