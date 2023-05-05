@@ -8,20 +8,20 @@ const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const ws = require("ws");
 const Message = require("./models/Message");
+const fs = require("fs");
 
 
 dotenv.config();
 mongoose.connect(process.env.MONGO_URL).then(() =>{
     console.log("Connected to MongoDB");
 }).catch((err) => {
-    console.log("Error connecting to MongoDB",error);
+    console.log("Error connecting to MongoDB",err);
 });
 const jwtSecret = process.env.JWT_SECRET;
 const bcryptSalt = bcrypt.genSaltSync(10);
 
-// console.log(process.env.MONGO_URL);
-
 const app = express();
+app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
@@ -203,26 +203,44 @@ wss.on("connection", (connection,req) => {
 
 //notify all clients that a new user has connected
 connection.on("message", async (message) => {
-  // bufffer to json 
   const messageData = JSON.parse(message.toString());
-  // console.log("message", message);
-  const {recipient, text} = messageData;
-  if (recipient && text ){
-  const messageDoc = await Message.create({
-    sender:connection.userId,
-    recipient,
-    text,
-  });
-
-  [...wss.clients]
-  .filter(c => c.userId === recipient)
-  .forEach(c => c.send(JSON.stringify({
-    text, 
-    sender:connection.userId,
-    _id:messageDoc._id,
-    recipient,
-  })));
+  const { recipient, text, file } = messageData;
+  let filename = null;
+  if (file) {
+    //split filename into parts by .
+   const parts = file.name.split(".");
+    const extension = parts[parts.length - 1];
+    filename = Date.now() + "." + extension;
+    const path = __dirname + "/uploads/" + filename;
+    const bufferData = new Buffer.from(file.data.split(',')[1], "base64");
+    fs.writeFile(path, bufferData, () => {
+      console.log("file saved");
+    });
+    
   }
+    if (recipient && (text || file)) {
+      const messageDoc = await Message.create({
+        sender: connection.userId,
+        recipient,
+        text,
+        file: file? filename : null,
+      });
+      console.log("created message");
+
+      [...wss.clients]
+        .filter((c) => c.userId === recipient)
+        .forEach((c) =>
+          c.send(
+            JSON.stringify({
+              text,
+              sender: connection.userId,
+              _id: messageDoc._id,
+              recipient,
+              file: file? filename : null,
+            })
+          )
+        );
+    }
   });
 
   notifyOnlinePeople();

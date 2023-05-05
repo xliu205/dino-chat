@@ -14,7 +14,7 @@ export default function Avatar({ userId, username, online}) {
         <div className="text-center w-full opacity-70">{username[0]}</div>
         {online && (
           // console.log("online:", online),
-          <div className="absolute w-3 h-3 -right-0 bg-green-400 rounded-full border border-white bottom-0 right-2"></div>
+          <div className="absolute w-2.5 h-2.5 left-5 bg-green-400 rounded-full border border-white bottom-0 right-2"></div>
         )}
       </div>
     );
