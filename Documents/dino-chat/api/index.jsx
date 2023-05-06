@@ -168,8 +168,8 @@ wss.on("connection", (connection,req) => {
       clearInterval(connection.timer);
       connection.terminate();
       notifyOnlinePeople();
-    },1000);
-  },5000);
+    },500);
+  },1000);
 
   connection.on("pong", () => {
     clearTimeout(connection.deathTimer);
@@ -225,7 +225,7 @@ connection.on("message", async (message) => {
         text,
         file: file? filename : null,
       });
-      console.log("created message");
+      // console.log("created message");
 
       [...wss.clients]
         .filter((c) => c.userId === recipient)

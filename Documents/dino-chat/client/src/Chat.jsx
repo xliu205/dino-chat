@@ -23,9 +23,11 @@ export default function Chat() {
     const [messages, setMessages] = useState([]);
     const divUnderMessages = useRef();
     const [offlinePeople, setOfflinePeople] = useState({});
+
+    //realtime connection to server
     useEffect(() => {
       connectToWs();
-  }, []);
+    }, [selectedUserId]);
 
   function connectToWs(){
      const ws = new WebSocket("ws://localhost:4000");
@@ -35,7 +37,7 @@ export default function Chat() {
           setTimeout(() => {
               console.log("reconnecting...");
               connectToWs();
-          }, 5000);
+          }, 1000);
       });
 
   }
@@ -53,7 +55,7 @@ export default function Chat() {
   function handleMessage(ev) {
     // console.log('new message', e);
     const messageData = JSON.parse(ev.data);
-    // console.log({ev,messageData});
+    console.log({ev,messageData});
     // console.log(messageData);
     if ('online' in messageData) {
       showOnlinePeople(messageData.online);
@@ -89,7 +91,7 @@ export default function Chat() {
       //clear input box
       setNewMessagesText("");
       //add message to messages
-      setMessages((prev) => [...prev,
+      setMessages(prev => ([...prev,
         {
           text: newMessageText,
           isOur: true,
@@ -97,7 +99,7 @@ export default function Chat() {
           recipient: selectedUserId,
           //id is a unique key by which react can identify each message
           _id: Date.now(),
-        }]);
+        }]));
     }
   }
 
@@ -272,9 +274,7 @@ function sendFile(ev) {
                     key={message._id}
                     className={
                       "text-left inline-block rounded-md text-sm p-2 my-2" +
-                      (message.sender === id
-                        ? " bg-gray-600 text-white"
-                        : " bg-purple-200 text-gray-600")
+                      (message.sender === id ? " bg-gray-600 text-white":" bg-purple-200 text-gray-600")
                     }
                   >
                     {/* sender: {message.sender}
@@ -288,9 +288,7 @@ function sendFile(ev) {
                           target="_blank"
                           className="flex items-center gap-1 border-b"
                           href={
-                            axios.defaults.baseURL + "/uploads/" + message.file
-                          }
-                        >
+                            axios.defaults.baseURL + "/uploads/" + message.file}>
                           {message.file}
                         </a>
                       </div>

@@ -10,6 +10,8 @@
     "jsonwebtoken": "^9.0.0",
     "mogoose": "^0.0.1-security",
     "mongoose": "^7.1.0",
+    "nodemon": "^2.0.22",
+    "nodeom": "^0.0.1",
     "ws": "^8.13.0"
   }
 }
