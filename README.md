@@ -43,9 +43,10 @@ npm run dev or yarn run dev
 
 
 ## Help
-
+* demo video at https://drive.google.com/file/d/1S7xuOP_zGqUx8Vvq2QW9vWSPSGpMjMRB/view?usp=share_link
+* partcial front end deployment at https://celebrated-rabanadas-1ffbcc.netlify.app/
 * deloper notes at https://docs.google.com/document/d/1cXKK_DfdV0lnf_wf-P7RcQSG1vYT9F-ysOQqAeY_g4g/edit?usp=sharing
-* demo video at 
+
 
 * MongoDB: A document-based NoSQL database used to store user data and messages
 * Express: A web application framework used to create the server-side logic
@@ -53,12 +54,6 @@ npm run dev or yarn run dev
 * React: A JavaScript library used to create the client-side user interface
 
 
-
-## Authors
-
-Contributors names and contact info
-
-ex. Lisa Liu
 
 
 ## Version History
