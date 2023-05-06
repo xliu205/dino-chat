@@ -5,6 +5,11 @@ Users can create an account, log in, and chat with other users who are online.
 
 ## Description
 
+Users can create an account, log in, and update their profile
+Users can see other online users and start a chat with them
+Users can send messages in real-time and receive them instantly
+Users can receive notifications when they receive a new message
+
 
 
 
@@ -13,14 +18,14 @@ Users can create an account, log in, and chat with other users who are online.
 * Navigate to the directory where the repository is cloned.
 * Install the required dependencies.
 * Run the development server.
-* The app will be served at http://localhost:5173/. Open this URL in your browser to use the app.
+* Open URL in your browser to use the app.
 
 ### Installing
+
 * Clone the repository
 ```
 git clone https://github.com/xliu205/dino-chat.git
 ```
-
 * for starting backend server run
 ```
 cd api
@@ -38,22 +43,17 @@ npm run dev or yarn run dev
 
 
 ## Help
-
-First load the app, you will be prompted to enter your username. 
-Once you have entered your username, you will be taken to the chat screen. On the chat screen, 
-you will see a list of all the online users on the left side of the screen. 
-You can click on any user in this list to start a conversation with them. 
-If a user is offline, they will appear in a separate list below the online users.
-When you click on a user, their chat history will be loaded in the chat area on the right side of the screen. 
-You can type a message into the input box at the bottom of the screen and press Enter to send a message to the selected user. 
-You can also send a file by clicking on the "Attach File" button and selecting a file from your computer.
+* demo video at https://drive.google.com/file/d/1S7xuOP_zGqUx8Vvq2QW9vWSPSGpMjMRB/view?usp=share_link
+* partcial front end deployment at https://celebrated-rabanadas-1ffbcc.netlify.app/
+* deloper notes at https://docs.google.com/document/d/1cXKK_DfdV0lnf_wf-P7RcQSG1vYT9F-ysOQqAeY_g4g/edit?usp=sharing
 
 
-## Authors
+* MongoDB: A document-based NoSQL database used to store user data and messages
+* Express: A web application framework used to create the server-side logic
+* Node.js: A JavaScript runtime used to execute server-side code
+* React: A JavaScript library used to create the client-side user interface
 
-Contributors names and contact info
 
-ex. Lisa Liu
 
 
 ## Version History
