@@ -47,10 +47,10 @@ npm run dev or yarn run dev
 * deloper notes at https://docs.google.com/document/d/1cXKK_DfdV0lnf_wf-P7RcQSG1vYT9F-ysOQqAeY_g4g/edit?usp=sharing
 * demo video at 
 
-MongoDB: A document-based NoSQL database used to store user data and messages
-Express: A web application framework used to create the server-side logic
-Node.js: A JavaScript runtime used to execute server-side code
-React: A JavaScript library used to create the client-side user interface
+* MongoDB: A document-based NoSQL database used to store user data and messages
+* Express: A web application framework used to create the server-side logic
+* Node.js: A JavaScript runtime used to execute server-side code
+* React: A JavaScript library used to create the client-side user interface
 
 
 
